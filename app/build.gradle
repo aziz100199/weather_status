@@ -74,5 +74,6 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.0-alpha01"
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.0-alpha01"
-
+/// lottie animation
+    implementation "com.airbnb.android:lottie:4.1.0"
 }

@@ -1,5 +1,7 @@
 package com.example.weatherupdates.ui.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -14,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherupdates.adapters.retrofit.WeatherAdapter
 import com.example.weatherupdates.databinding.ActivityWeatherBinding
 import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
+import com.example.weatherupdates.utils.Utils
 import kotlinx.coroutines.launch
 
 class WeatherActivity : AppCompatActivity() {
@@ -24,6 +27,14 @@ class WeatherActivity : AppCompatActivity() {
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         connectionDetector()
+        navigateBack()
+    }
+
+    private fun navigateBack() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
     }
 
 
@@ -75,12 +86,26 @@ class WeatherActivity : AppCompatActivity() {
         binding?.weatherRecycler?.apply {
             binding?.progressBar?.isVisible = true
             layoutManager = LinearLayoutManager(this@WeatherActivity)
-            weatherVIewModel.weatherLD.observe(this@WeatherActivity) {
-                val weatherAdapter = WeatherAdapter(it.days)
+            weatherVIewModel.weatherLD.observe(this@WeatherActivity) { observeValue ->
+                Utils.weatherResponse.addAll(listOf(observeValue))
+                val weatherAdapter = WeatherAdapter(observeValue.days) { position ->
+                    when (position) {
+                        0 -> activityLaunch(CurrentDayDetailActivity())
+                    }
+                }
                 adapter = weatherAdapter
                 binding?.progressBar?.isVisible = false
             }
         }
 
+    }
+
+    private fun activityLaunch(activity: Activity) {
+        startActivity(Intent(this, activity::class.java))
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }

@@ -8,7 +8,7 @@ import com.example.weatherupdates.databinding.WeatherResponseLayoutBinding
 import com.example.weatherupdates.weathermodel.Day
 import timber.log.Timber
 
-class WeatherAdapter(private val list: List<Day?>?) :
+class WeatherAdapter(private val list: List<Day?>?, val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<WeatherAdapter.VhRetrofit>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VhRetrofit {
         val binding = WeatherResponseLayoutBinding.inflate(
@@ -29,6 +29,9 @@ class WeatherAdapter(private val list: List<Day?>?) :
                 "partly-cloudy-day" -> tempIcon.setImageResource(R.drawable.ic_partialy_cloudy)
                 "rain" -> tempIcon.setImageResource(R.drawable.ic_rain)
                 "clear-day" -> tempIcon.setImageResource(R.drawable.ic_suny)
+            }
+            weatherContainer.setOnClickListener{
+            onClick(position)
             }
         }
 
