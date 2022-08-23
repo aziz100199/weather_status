@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherupdates.R
 import com.example.weatherupdates.databinding.WeatherResponseLayoutBinding
+import com.example.weatherupdates.utils.Utils.PARTLY_CLOUDY_DAY
+import com.example.weatherupdates.utils.Utils.RAINY_DAY
+import com.example.weatherupdates.utils.Utils.SUNNY_DAY
 import com.example.weatherupdates.weathermodel.Day
 import timber.log.Timber
 
@@ -26,12 +29,20 @@ class WeatherAdapter(private val list: List<Day?>?, val onClick: (Int) -> Unit) 
             temperature = list[position]?.temp.toString()
             Timber.d(list[position]?.icon)
             when (list[position]?.icon) {
-                "partly-cloudy-day" -> tempIcon.setImageResource(R.drawable.ic_partialy_cloudy)
-                "rain" -> tempIcon.setImageResource(R.drawable.ic_rain)
-                "clear-day" -> tempIcon.setImageResource(R.drawable.ic_suny)
+                PARTLY_CLOUDY_DAY -> {
+                    animation.animationView.setAnimation(R.raw.partly_cloudy_day)
+                }
+                RAINY_DAY -> {
+                    animation.animationView.setAnimation(R.raw.rainy_day)
+                }
+
+                SUNNY_DAY -> {
+                    animation.animationView.setAnimation(R.raw.sunny_day)
+
+                }
             }
-            weatherContainer.setOnClickListener{
-            onClick(position)
+            weatherContainer.setOnClickListener {
+                onClick(position)
             }
         }
 

@@ -52,6 +52,17 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_goneMarginEnd="4dp" />
 
+        <include
+            android:id="@+id/animation"
+            layout="@layout/weather_animation"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_goneMarginEnd="4dp" />
+
         <TextView
             android:id="@+id/statusTv"
             android:layout_width="wrap_content"
