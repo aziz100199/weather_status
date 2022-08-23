@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WeatherUpdates</string>
+    <string name="cloud">cloud</string>
+</resources>
