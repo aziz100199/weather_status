@@ -27,7 +27,7 @@
             android:name=".ui.activities.CurrentDayDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.WeatherActivity"
+            android:name=".ui.activities.acitivy.WeatherActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

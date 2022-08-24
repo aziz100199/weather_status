@@ -9,7 +9,6 @@ import com.example.weatherupdates.utils.Utils.PARTLY_CLOUDY_DAY
 import com.example.weatherupdates.utils.Utils.RAINY_DAY
 import com.example.weatherupdates.utils.Utils.SUNNY_DAY
 import com.example.weatherupdates.weathermodel.Day
-import timber.log.Timber
 
 class WeatherAdapter(private val list: List<Day?>?, val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<WeatherAdapter.VhRetrofit>() {
@@ -27,7 +26,7 @@ class WeatherAdapter(private val list: List<Day?>?, val onClick: (Int) -> Unit) 
             date = list!![position]?.datetime
             status = list[position]?.conditions
             temperature = list[position]?.temp.toString()
-            Timber.d(list[position]?.icon)
+
             when (list[position]?.icon) {
                 PARTLY_CLOUDY_DAY -> {
                     animation.animationView.setAnimation(R.raw.partly_cloudy_day)

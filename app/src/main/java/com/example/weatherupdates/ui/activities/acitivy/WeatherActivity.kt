@@ -1,7 +1,5 @@
-package com.example.weatherupdates.ui.activities
+package com.example.weatherupdates.ui.activities.acitivy
 
-import android.app.Activity
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
@@ -10,10 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.weatherupdates.adapters.retrofit.WeatherAdapter
 import com.example.weatherupdates.databinding.ActivityWeatherBinding
 import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
 import com.example.weatherupdates.utils.Utils
@@ -26,20 +21,11 @@ class WeatherActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWeatherBinding.inflate(layoutInflater)
         setContentView(binding?.root)
-        connectionDetector()
         navigateBack()
+        connectionDetector()
     }
-
-    private fun navigateBack() {
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-        }
-    }
-
 
     private fun connectionDetector() {
-        binding?.progressBar?.isVisible = true
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
@@ -49,11 +35,10 @@ class WeatherActivity : AppCompatActivity() {
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             // network is available for use
             override fun onAvailable(network: Network) {
-                weatherVIewModel.inIt()
                 lifecycleScope.launch {
-                    recyclerView()
+                    weatherVIewModel.inIt()
+                    observeValue()
                 }
-
             }
 
             // Network capabilities have changed for the network
@@ -81,27 +66,18 @@ class WeatherActivity : AppCompatActivity() {
         connectivityManager.requestNetwork(networkRequest, networkCallback)
     }
 
-    private fun recyclerView() {
-
-        binding?.weatherRecycler?.apply {
-            binding?.progressBar?.isVisible = true
-            layoutManager = LinearLayoutManager(this@WeatherActivity)
-            weatherVIewModel.weatherLD.observe(this@WeatherActivity) { observeValue ->
-                Utils.weatherResponse.addAll(listOf(observeValue))
-                val weatherAdapter = WeatherAdapter(observeValue.days) { position ->
-                    when (position) {
-                        0 -> activityLaunch(CurrentDayDetailActivity())
-                    }
-                }
-                adapter = weatherAdapter
-                binding?.progressBar?.isVisible = false
-            }
+    private fun observeValue() {
+        weatherVIewModel.weatherLD.observe(this) { observeValue ->
+            Utils.weatherResponse.addAll(listOf(observeValue))
         }
-
     }
 
-    private fun activityLaunch(activity: Activity) {
-        startActivity(Intent(this, activity::class.java))
+
+    private fun navigateBack() {
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowHomeEnabled(true)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

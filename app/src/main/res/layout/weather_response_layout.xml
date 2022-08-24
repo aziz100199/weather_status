@@ -25,7 +25,7 @@
         android:layout_margin="10dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/weather_recycler_item_background"
-        android:elevation="10sp">
+        android:elevation="8sp">
 
         <TextView
             android:id="@+id/dateTv"

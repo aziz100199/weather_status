@@ -1,6 +1,7 @@
 package com.example.weatherupdates
 
 import android.app.Application
+import com.example.weatherupdates.weather_data_base.WeatherDatabase
 import timber.log.Timber
 
 class BaseApplication : Application() {
