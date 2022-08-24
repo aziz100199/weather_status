@@ -1,42 +1,44 @@
-package com.example.weatherupdates.ui.activities
+package com.example.weatherupdates.ui.activities.fragments
 
-import android.app.Activity
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.weatherupdates.R
 import com.example.weatherupdates.adapters.retrofit.WeatherAdapter
-import com.example.weatherupdates.databinding.ActivityWeatherBinding
+import com.example.weatherupdates.databinding.FragmentWeatherBinding
 import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
 import com.example.weatherupdates.utils.Utils
 import kotlinx.coroutines.launch
 
-class WeatherActivity : AppCompatActivity() {
-    private var binding: ActivityWeatherBinding? = null
-    private val weatherVIewModel by viewModels<WeatherVIewModel>()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityWeatherBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+
+class WeatherFragment : Fragment() {
+    private var binding: FragmentWeatherBinding? = null
+    private val weatherVIewModel by activityViewModels<WeatherVIewModel>()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentWeatherBinding.inflate(layoutInflater, container, false)
+        return binding?.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         connectionDetector()
-        navigateBack()
     }
-
-    private fun navigateBack() {
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowHomeEnabled(true)
-        }
-    }
-
 
     private fun connectionDetector() {
         binding?.progressBar?.isVisible = true
@@ -49,7 +51,6 @@ class WeatherActivity : AppCompatActivity() {
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             // network is available for use
             override fun onAvailable(network: Network) {
-                weatherVIewModel.inIt()
                 lifecycleScope.launch {
                     recyclerView()
                 }
@@ -74,7 +75,7 @@ class WeatherActivity : AppCompatActivity() {
         }
         val connectivityManager =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                getSystemService(ConnectivityManager::class.java) as ConnectivityManager
+                requireActivity().getSystemService(ConnectivityManager::class.java) as ConnectivityManager
             } else {
                 TODO("VERSION.SDK_INT < M")
             }
@@ -85,12 +86,12 @@ class WeatherActivity : AppCompatActivity() {
 
         binding?.weatherRecycler?.apply {
             binding?.progressBar?.isVisible = true
-            layoutManager = LinearLayoutManager(this@WeatherActivity)
-            weatherVIewModel.weatherLD.observe(this@WeatherActivity) { observeValue ->
+            layoutManager = LinearLayoutManager(requireContext())
+            weatherVIewModel.weatherLD.observe(requireActivity()) { observeValue ->
                 Utils.weatherResponse.addAll(listOf(observeValue))
                 val weatherAdapter = WeatherAdapter(observeValue.days) { position ->
                     when (position) {
-                        0 -> activityLaunch(CurrentDayDetailActivity())
+                        0 -> goToNextFragment()
                     }
                 }
                 adapter = weatherAdapter
@@ -100,12 +101,8 @@ class WeatherActivity : AppCompatActivity() {
 
     }
 
-    private fun activityLaunch(activity: Activity) {
-        startActivity(Intent(this, activity::class.java))
+    private fun goToNextFragment() {
+        findNavController().navigate(R.id.weatherFragment_to_currentDayDetailFragment)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
-    }
 }
