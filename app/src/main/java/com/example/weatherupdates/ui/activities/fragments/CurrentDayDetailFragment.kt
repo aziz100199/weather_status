@@ -26,21 +26,91 @@ class CurrentDayDetailFragment : Fragment() {
         setData()
     }
 
+
     private fun setData() {
         binding?.apply {
             animationViewBG.backGroundAnimationView.setAnimation(R.raw.weather_detail_background)
-            weatherConIcon.animationView.setAnimation(R.raw.sunny_day)
-            Utils.weatherResponse[0].apply {
-                date = days!![0]?.datetime.toString()
-                condition = currentConditions?.conditions
-                wind = days[0]?.winddir.toString()
-                hum = days[0]?.humidity.toString()
-                pressure = days[0]?.pressure.toString()
-                temperature = days[0]?.temp.toString()
-                windspeed = days[0]?.windspeed.toString()
-                information= days[0]?.description.toString()
+            when (Utils.currentPosition) {
+                0 -> {
+                    setAnimation(0)
+                }
+                1 -> {
+                    setAnimation(1)
+                }
+                2 -> {
+                    setAnimation(2)
+                }
+                3 -> {
+                    setAnimation(3)
+                }
+                4 -> {
+                    setAnimation(4)
+                }
+                5 -> {
+                    setAnimation(5)
+                }
+                6 -> {
+                    setAnimation(6)
+                }
+                7 -> {
+                    setAnimation(7)
+                }
+                8 -> {
+                    setAnimation(8)
+                }
+                9 -> {
+                    setAnimation(9)
+                }
+                10 -> {
+                    setAnimation(10)
+                }
+                11 -> {
+                    setAnimation(11)
+                }
+                12 -> {
+                    setAnimation(12)
+                }
+                13 -> {
+                    setAnimation(13)
+                }
+                14 -> {
+                    setAnimation(14)
+                }
+                else -> {
+                    setAnimation(0)
+                }
             }
         }
     }
 
+    private fun setAnimation(position: Int) {
+        binding?.apply {
+            Utils.weatherResponse[0].apply {
+                date = days!![position]?.datetime.toString()
+                condition = days[position]?.conditions
+                wind = days[position]?.winddir.toString()
+                hum = days[position]?.humidity.toString()
+                pressure = days[position]?.pressure.toString()
+                temperature = days[position]?.temp.toString()
+                windspeed = days[position]?.windspeed.toString()
+                information = days[position]?.description.toString()
+
+                when (Utils.weatherResponse[0].days?.get(position)?.icon.toString()) {
+                    Utils.PARTLY_CLOUDY_DAY -> {
+                        weatherConIcon.animationView.setAnimation(R.raw.partly_cloudy_day)
+                    }
+                    Utils.RAINY_DAY -> {
+                        weatherConIcon.animationView.setAnimation(R.raw.rainy_day)
+                        animationViewBG.backGroundAnimationView.setAnimation(R.raw.cloudy)
+                    }
+
+                    Utils.SUNNY_DAY -> {
+                        weatherConIcon.animationView.setAnimation(R.raw.sunny_day)
+
+                    }
+                }
+            }
+        }
+
+    }
 }
