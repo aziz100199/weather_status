@@ -29,7 +29,17 @@ class CurrentDayDetailFragment : Fragment() {
     private fun setData() {
         binding?.apply {
             animationViewBG.backGroundAnimationView.setAnimation(R.raw.weather_detail_background)
-            condition = Utils.weatherResponse[0].description
+            weatherConIcon.animationView.setAnimation(R.raw.sunny_day)
+            Utils.weatherResponse[0].apply {
+                date = days!![0]?.datetime.toString()
+                condition = currentConditions?.conditions
+                wind = days[0]?.winddir.toString()
+                hum = days[0]?.humidity.toString()
+                pressure = days[0]?.pressure.toString()
+                temperature = days[0]?.temp.toString()
+                windspeed = days[0]?.windspeed.toString()
+                information= days[0]?.description.toString()
+            }
         }
     }
 
