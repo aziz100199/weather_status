@@ -23,9 +23,9 @@ data class CurrentConditions(
     @SerializedName("precip")
     val precip: Double?,
     @SerializedName("precipprob")
-    val precipprob: Any?,
+    val precipprob: String?,
     @SerializedName("preciptype")
-    val preciptype: Any?,
+    val preciptype: String?,
     @SerializedName("pressure")
     val pressure: Double?,
     @SerializedName("snow")

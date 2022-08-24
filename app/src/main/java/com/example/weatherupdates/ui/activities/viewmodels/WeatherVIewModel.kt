@@ -27,11 +27,26 @@ class WeatherVIewModel(application: Application) : AndroidViewModel(application)
     private fun weatherResponse() {
         viewModelScope.launch {
             val response = WeatherApiInstance.WeatherApi.getWeather()
-            Timber.d(response.body()?.address.toString())
-            if (response.isSuccessful && response.body() != null) {
-                weatherMLD.postValue(response.body())
+            val body = response.body()
+            if (response.isSuccessful && body != null) {
+                weatherMLD.postValue(body!!)
                 Timber.d(response.isSuccessful.toString())
-                repository.insert(WeatherEntities(firstnae = "firstcalue"))
+
+                val weatherEntities = WeatherEntities(
+                    currentConditions = body.currentConditions,
+                    days = body.days,
+                    description = body.description,
+                    latitude = body.latitude,
+                    longitude = body.longitude,
+                    queryCost = body.queryCost,
+                    resolvedAddress = body.resolvedAddress,
+                    stations = body.stations,
+                    timezone = body.timezone,
+                    tzoffset = body.tzoffset,
+                )
+
+                repository.insert(weatherEntities)
+                Timber.d("Inserstaion complete")
             }
         }
     }
