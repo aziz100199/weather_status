@@ -11,7 +11,7 @@ data class WheatherResponse(
     @SerializedName("currentConditions")
     val currentConditions: CurrentConditions?,
     @SerializedName("days")
-    val days: List<Day?>?,
+    val days: List<Day>,
     @SerializedName("description")
     val description: String?,
     @SerializedName("latitude")

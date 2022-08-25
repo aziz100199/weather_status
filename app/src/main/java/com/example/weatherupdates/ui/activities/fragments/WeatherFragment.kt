@@ -14,6 +14,7 @@ import com.example.weatherupdates.adapters.retrofit.WeatherAdapter
 import com.example.weatherupdates.databinding.FragmentWeatherBinding
 import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
 import com.example.weatherupdates.utils.Utils
+import timber.log.Timber
 
 
 class WeatherFragment : Fragment() {
@@ -40,7 +41,7 @@ class WeatherFragment : Fragment() {
             binding?.progressBar?.isVisible = true
             layoutManager = LinearLayoutManager(requireContext())
             weatherVIewModel.weatherLD.observe(requireActivity()) {
-                val weatherAdapter = WeatherAdapter(it.days) { position ->
+                val weatherAdapter = WeatherAdapter(it) { position ->
                     Utils.currentPosition = position
                     goToNextFragment(R.id.weatherFragment_to_currentDayDetailFragment)
                 }

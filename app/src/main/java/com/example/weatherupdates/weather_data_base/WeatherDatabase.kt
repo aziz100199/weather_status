@@ -4,10 +4,11 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
-import com.example.weatherupdates.weathermodel.WheatherResponse
+import androidx.room.TypeConverters
+import com.example.weatherupdates.dayaconverter.WeatherTypeConverter
 
 @Database(entities = [WeatherEntities::class], version = 1)
+@TypeConverters(WeatherTypeConverter::class)
 abstract class WeatherDatabase : RoomDatabase() {
     abstract fun weatherDao(): UserDataAccessOpject
 

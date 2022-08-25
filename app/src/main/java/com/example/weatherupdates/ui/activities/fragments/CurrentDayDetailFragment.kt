@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import com.example.weatherupdates.R
 import com.example.weatherupdates.databinding.FragmentCurrentDayDetailBinding
 import com.example.weatherupdates.utils.Utils
+import timber.log.Timber
+
 
 class CurrentDayDetailFragment : Fragment() {
     private var binding: FragmentCurrentDayDetailBinding? = null
@@ -86,29 +88,30 @@ class CurrentDayDetailFragment : Fragment() {
     private fun setAnimation(position: Int) {
         binding?.apply {
             Utils.weatherResponse[0].apply {
-                date = days!![position]?.datetime.toString()
-                condition = days[position]?.conditions
-                wind = days[position]?.winddir.toString()
-                hum = days[position]?.humidity.toString()
-                pressure = days[position]?.pressure.toString()
-                temperature = days[position]?.temp.toString()
-                windspeed = days[position]?.windspeed.toString()
-                information = days[position]?.description.toString()
+                Timber.d("date is here :::"+this[position].datetime)
+                date = this[position].datetime
+                condition = this[position].conditions
+                wind = this[position].winddir.toString()
+                hum = this[position].humidity.toString()
+                pressure = this[position].pressure.toString()
+                temperature = this[position].temp.toString()
+                windspeed = this[position].windspeed.toString()
+                information = this[position].description.toString()
 
-                when (Utils.weatherResponse[0].days?.get(position)?.icon.toString()) {
-                    Utils.PARTLY_CLOUDY_DAY -> {
-                        weatherConIcon.animationView.setAnimation(R.raw.partly_cloudy_day)
-                    }
-                    Utils.RAINY_DAY -> {
-                        weatherConIcon.animationView.setAnimation(R.raw.rainy_day)
-                        animationViewBG.backGroundAnimationView.setAnimation(R.raw.cloudy)
-                    }
+                 when (this[position].icon.toString()) {
+                     Utils.PARTLY_CLOUDY_DAY -> {
+                         weatherConIcon.animationView.setAnimation(R.raw.partly_cloudy_day)
+                     }
+                     Utils.RAINY_DAY -> {
+                         weatherConIcon.animationView.setAnimation(R.raw.rainy_day)
+                         animationViewBG.backGroundAnimationView.setAnimation(R.raw.cloudy)
+                     }
 
-                    Utils.SUNNY_DAY -> {
-                        weatherConIcon.animationView.setAnimation(R.raw.sunny_day)
+                     Utils.SUNNY_DAY -> {
+                         weatherConIcon.animationView.setAnimation(R.raw.sunny_day)
 
-                    }
-                }
+                     }
+                 }
             }
         }
 

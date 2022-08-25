@@ -13,6 +13,7 @@ import com.example.weatherupdates.databinding.ActivityWeatherBinding
 import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
 import com.example.weatherupdates.utils.Utils
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class WeatherActivity : AppCompatActivity() {
     private var binding: ActivityWeatherBinding? = null
@@ -23,6 +24,9 @@ class WeatherActivity : AppCompatActivity() {
         setContentView(binding?.root)
         navigateBack()
         connectionDetector()
+        weatherVIewModel.getResponse()
+        observeValue()
+        Timber.d("oncreat call")
     }
 
     private fun connectionDetector() {
@@ -31,7 +35,6 @@ class WeatherActivity : AppCompatActivity() {
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
             .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build()
-
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             // network is available for use
             override fun onAvailable(network: Network) {
@@ -39,6 +42,7 @@ class WeatherActivity : AppCompatActivity() {
                     weatherVIewModel.inIt()
                     observeValue()
                 }
+                Timber.d("net work available")
             }
 
             // Network capabilities have changed for the network
@@ -46,15 +50,14 @@ class WeatherActivity : AppCompatActivity() {
                 network: Network,
                 networkCapabilities: NetworkCapabilities
             ) {
+                Timber.d("network onCapabilitiesChanged")
                 super.onCapabilitiesChanged(network, networkCapabilities)
                 networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
-
             }
 
             // lost network connection
             override fun onLost(network: Network) {
                 super.onLost(network)
-
             }
         }
         val connectivityManager =
