@@ -24,7 +24,7 @@ class WeatherAdapter(private val list: List<Day?>?, val onClick: (Int) -> Unit) 
     override fun onBindViewHolder(holder: VhRetrofit, position: Int) {
         holder.binding.apply {
             date = list!![position]?.datetime
-            status = list[position]?.conditions
+            status = list[position]?.icon
             temperature = list[position]?.temp.toString()
 
             when (list[position]?.icon) {
@@ -37,7 +37,6 @@ class WeatherAdapter(private val list: List<Day?>?, val onClick: (Int) -> Unit) 
 
                 SUNNY_DAY -> {
                     animation.animationView.setAnimation(R.raw.sunny_day)
-
                 }
             }
             weatherContainer.setOnClickListener {

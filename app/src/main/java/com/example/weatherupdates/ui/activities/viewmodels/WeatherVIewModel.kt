@@ -11,7 +11,6 @@ import com.example.weatherupdates.weather_data_base.WeatherEntities
 import com.example.weatherupdates.weather_data_base.WeatherRepository
 import com.example.weatherupdates.weathermodel.Day
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class WeatherVIewModel(application: Application) : AndroidViewModel(application) {
     private val weatherMLD = MutableLiveData<List<Day>>()
@@ -27,9 +26,7 @@ class WeatherVIewModel(application: Application) : AndroidViewModel(application)
     private fun weatherResponse() {
         viewModelScope.launch {
             val response = WeatherApiInstance.WeatherApi.getWeather()
-            Timber.d(response.body()?.address.toString())
             if (response.isSuccessful && response.body() != null) {
-                Timber.d(response.isSuccessful.toString())
                 repository.insert(
                     WeatherEntities(
                         conditions = response.body()!!.currentConditions?.conditions,
@@ -42,9 +39,7 @@ class WeatherVIewModel(application: Application) : AndroidViewModel(application)
             weatherMLD.postValue(repository.getAllItem().days)
         }
     }
-
     fun getResponse() {
         weatherMLD.postValue(repository.getAllItem().days)
     }
-
 }
