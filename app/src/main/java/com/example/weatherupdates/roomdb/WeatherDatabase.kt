@@ -1,4 +1,4 @@
-package com.example.weatherupdates.weather_data_base
+package com.example.weatherupdates.roomdb
 
 import android.app.Application
 import androidx.room.Database
@@ -13,7 +13,7 @@ abstract class WeatherDatabase : RoomDatabase() {
     abstract fun weatherDao(): UserDataAccessOpject
 
     companion object {
-        private const val DB_NAME = "UserDB.db"
+        private const val DB_NAME = "weatherDB"
         private var INSTANCE: WeatherDatabase? = null
 
         fun getInstance(application: Application): WeatherDatabase {

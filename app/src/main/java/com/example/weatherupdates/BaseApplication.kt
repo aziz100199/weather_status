@@ -1,17 +1,16 @@
 package com.example.weatherupdates
 
 import android.app.Application
-import com.example.weatherupdates.weather_data_base.WeatherDatabase
 import timber.log.Timber
 
 class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        hInitTimber()
+        initTimber()
     }
 
-    private fun hInitTimber() {
+    private fun initTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(object : Timber.DebugTree() {
                 override fun log(
@@ -20,13 +19,13 @@ class BaseApplication : Application() {
                     message: String,
                     t: Throwable?,
                 ) {
-                    super.log(priority, String.format(hTag, tag), message, t)
+                    super.log(priority, String.format(timberTag, tag), message, t)
                 }
             })
         }
     }
 
     companion object {
-        const val hTag = "timberTag %s"
+        const val timberTag = "timberTag %s"
     }
 }

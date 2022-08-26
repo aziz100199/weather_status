@@ -47,7 +47,7 @@ class WeatherAdapter(private val list: List<Day?>?, val onClick: (Int) -> Unit) 
     }
 
     override fun getItemCount(): Int {
-        return list!!.size
+        return list?.size!!
     }
 
     class VhRetrofit(var binding: WeatherResponseLayoutBinding) :

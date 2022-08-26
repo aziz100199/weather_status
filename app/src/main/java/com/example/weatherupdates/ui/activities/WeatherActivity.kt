@@ -1,4 +1,4 @@
-package com.example.weatherupdates.ui.activities.acitivy
+package com.example.weatherupdates.ui.activities
 
 import android.net.ConnectivityManager
 import android.net.Network
@@ -10,9 +10,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.weatherupdates.databinding.ActivityWeatherBinding
-import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
+import com.example.weatherupdates.ui.viewmodels.WeatherVIewModel
 import com.example.weatherupdates.utils.Utils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 
@@ -22,12 +25,12 @@ class WeatherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWeatherBinding.inflate(layoutInflater)
+
         setContentView(binding?.root)
         navigateBack()
         connectionDetector()
         weatherVIewModel.getResponse()
         observeValue()
-        Timber.d("on create call")
     }
 
     private fun connectionDetector() {
@@ -40,9 +43,16 @@ class WeatherActivity : AppCompatActivity() {
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             // network is available for use
             override fun onAvailable(network: Network) {
-                lifecycleScope.launch {
-                    weatherVIewModel.inIt()
-                    observeValue()
+                lifecycleScope.launch(Dispatchers.IO) {
+                    while (true) {
+
+                        withContext(Dispatchers.Main){
+                            weatherVIewModel.inIt()
+                            observeValue()
+                        }
+
+                        delay(700000)
+                    }
                 }
                 Timber.d("net work available")
             }
@@ -74,10 +84,9 @@ class WeatherActivity : AppCompatActivity() {
 
     private fun observeValue() {
         weatherVIewModel.weatherLD.observe(this) { observeValue ->
-            Utils.weatherResponse.addAll(listOf(observeValue))
+            Utils.weatherResponse = observeValue
         }
     }
-
 
     private fun navigateBack() {
         supportActionBar?.apply {
@@ -90,4 +99,5 @@ class WeatherActivity : AppCompatActivity() {
         onBackPressed()
         return super.onSupportNavigateUp()
     }
+
 }

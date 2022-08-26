@@ -9,8 +9,8 @@ class WeatherTypeConverter {
 
 
     @TypeConverter
-    fun hConvertDaysListToString(hDaysList: List<Day>?): String? {
-        hDaysList?.let {
+    fun convertDaysListToString(daysList: List<Day>?): String? {
+       daysList?.let {
             val hGson = GsonBuilder()
                 .setPrettyPrinting()
                 .create()
@@ -22,16 +22,16 @@ class WeatherTypeConverter {
 
 
     @TypeConverter
-    fun hConvertStringToDaysList(listString: String?): List<Day>? {
-        val hGson = GsonBuilder().setPrettyPrinting().create()
+    fun convertStringToDaysList(listString: String?): List<Day>? {
+        val gson = GsonBuilder().setPrettyPrinting().create()
 
         return if (listString != null && listString != "null") {
-            val hDaysList: List<Day> = hGson.fromJson(
+            val daysList: List<Day> = gson.fromJson(
                 listString,
                 object : TypeToken<List<Day>>() {
                 }.type
             )
-            hDaysList
+            daysList
         } else {
             null
         }

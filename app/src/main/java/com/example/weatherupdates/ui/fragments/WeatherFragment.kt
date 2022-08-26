@@ -1,4 +1,4 @@
-package com.example.weatherupdates.ui.activities.fragments
+package com.example.weatherupdates.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.weatherupdates.R
 import com.example.weatherupdates.adapters.retrofit.WeatherAdapter
 import com.example.weatherupdates.databinding.FragmentWeatherBinding
-import com.example.weatherupdates.ui.activities.viewmodels.WeatherVIewModel
+import com.example.weatherupdates.ui.viewmodels.WeatherVIewModel
 import com.example.weatherupdates.utils.Utils
-import timber.log.Timber
 
 
 class WeatherFragment : Fragment() {
@@ -36,17 +35,19 @@ class WeatherFragment : Fragment() {
 
 
     private fun recyclerView() {
-
         binding?.weatherRecycler?.apply {
             binding?.progressBar?.isVisible = true
             layoutManager = LinearLayoutManager(requireContext())
             weatherVIewModel.weatherLD.observe(requireActivity()) {
-                val weatherAdapter = WeatherAdapter(it) { position ->
-                    Utils.currentPosition = position
-                    goToNextFragment(R.id.weatherFragment_to_currentDayDetailFragment)
+                if (it != null && it.isNotEmpty()) {
+                    val weatherAdapter = WeatherAdapter(it) { position ->
+                        Utils.currentPosition = position
+                        goToNextFragment(R.id.weatherFragment_to_currentDayDetailFragment)
+                    }
+                    adapter = weatherAdapter
+                    binding?.progressBar?.isVisible = false
                 }
-                adapter = weatherAdapter
-                binding?.progressBar?.isVisible = false
+
             }
         }
 
@@ -55,5 +56,4 @@ class WeatherFragment : Fragment() {
     private fun goToNextFragment(id: Int) {
         findNavController().navigate(id)
     }
-
 }

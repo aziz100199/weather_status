@@ -7,5 +7,9 @@
     <string name="hum">Hum</string>
     <string name="pressure">pressure</string>
     <string name="temp">Temp</string>
-    <string name="air_quality">Air Quilty</string>
+    <string name="air_quality">Air Quality</string>
+    <string name="description">description:</string>
+    <string name="airValue">airValue</string>
+    <string name="dummyDate">dummyDate</string>
+    <string name="condition">condition</string>
 </resources>

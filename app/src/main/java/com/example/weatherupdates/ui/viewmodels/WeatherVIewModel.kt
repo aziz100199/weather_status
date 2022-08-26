@@ -1,4 +1,4 @@
-package com.example.weatherupdates.ui.activities.viewmodels
+package com.example.weatherupdates.ui.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherupdates.netwrok.WeatherApiInstance
-import com.example.weatherupdates.weather_data_base.WeatherDatabase
-import com.example.weatherupdates.weather_data_base.WeatherEntities
-import com.example.weatherupdates.weather_data_base.WeatherRepository
+import com.example.weatherupdates.roomdb.WeatherDatabase
+import com.example.weatherupdates.roomdb.WeatherEntities
+import com.example.weatherupdates.roomdb.WeatherRepository
 import com.example.weatherupdates.weathermodel.Day
 import kotlinx.coroutines.launch
 
@@ -18,7 +18,7 @@ class WeatherVIewModel(application: Application) : AndroidViewModel(application)
         emitSource(weatherMLD)
     }
     private val db = WeatherDatabase.getInstance(application)
-    private val repository = WeatherRepository(db)
+    private val repository : WeatherRepository? = WeatherRepository(db)
     fun inIt() {
         weatherResponse()
     }
@@ -27,7 +27,7 @@ class WeatherVIewModel(application: Application) : AndroidViewModel(application)
         viewModelScope.launch {
             val response = WeatherApiInstance.WeatherApi.getWeather()
             if (response.isSuccessful && response.body() != null) {
-                repository.insert(
+                val isInsert = repository?.insert(
                     WeatherEntities(
                         conditions = response.body()!!.currentConditions?.conditions,
                         datetime = response.body()!!.currentConditions?.datetime,
@@ -36,10 +36,11 @@ class WeatherVIewModel(application: Application) : AndroidViewModel(application)
                     )
                 )
             }
-            weatherMLD.postValue(repository.getAllItem().days)
+            weatherMLD.postValue(repository?.getAllItem()?.days)
         }
     }
+
     fun getResponse() {
-        weatherMLD.postValue(repository.getAllItem().days)
+        weatherMLD.postValue(repository?.getAllItem()?.days)
     }
 }
